@@ -273,16 +273,15 @@ elsif ( $commandid ) {
 	}
 	exit(0);
 }
-	
-
-my($oid);
-foreach $oid ( sort keys %$result ) {
-	my($value) = $result->{$oid};
-	if ( $onoutlet > 0 ) {
-		next unless ( $oid =~ /\.$onoutlet$/ );
+else {
+	my($outlet);
+	foreach $outlet ( sort keys %outlets ) {
+		next unless ( $outlet );
+		my($status) = $outlets{$outlet}{status};
+		if ( $onoutlet > 0 ) {
+			next unless ( $outlet ==  $onoutlet );
+		}
+		print "Outlet " . $outlet . ": " . $revcommand{$status} . "\n";
 	}
-	my($outlet) = lastoidindex($oid);
-	print "Outlet " . $outlet . ": " . $revcommand{$value} . "\n";
-	#print $_ . ": " . $result->{$_} . "\n";
 }
-#print Dumper(\$result);
+exit(0);
