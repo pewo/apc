@@ -6,6 +6,57 @@ use Net::SNMP;
 
 use Getopt::Long;
 
+#####################################################################
+# From the apc mib
+#####################################################################
+# SYNTAX        INTEGER  {       
+#               immediateOn     (1),     
+#               immediateOff    (2),     
+#               immediateReboot         (3),     
+#               outletUnknown   (4),     
+#               delayedOn       (5),     
+#               delayedOff      (6),     
+#               delayedReboot   (7),     
+#               cancelPendingCommand    (8)      
+#       }
+#       ACCESS  read-write       
+#       DESCRIPTION              
+#       "Getting this variable will return the outlet state. If
+# the outlet is on, the immediateOn (1) value will be returned.
+# If the outlet is off, the immediateOff (2) value will be
+# returned. If the state of the outlet cannot be
+# determined, the outletUnknown (4) value will be returned.
+# If the outletUnknown condition should occur, all devices
+# powered by the PDU should be shut down. The PDU's power
+# should then be cycled to clear this condition.
+# 
+# Setting this variable to immediateOn (1) will immediately turn
+# the outlet on.
+# 
+# Setting this variable to immediateOff (2) will immediately turn
+# the outlet off.
+# 
+# Setting this variable to immediateReboot (3) will cause the
+# Switched Rack PDU to perform an immediateOff command, wait the
+# rPDU2OutletSwitchedConfigRebootDuration OID time, and then perform an
+# immediateOn command.
+# 
+# Setting this variable to delayedOn (5) will turn the outlet on
+# after the rPDU2OutletSwitchedConfigPowerOnTime OID time has elapsed.
+# 
+# Setting this variable to delayedOff (6) will turn the outlet off
+# after the rPDU2OutletSwitchedConfigPowerOffTime OID time has elapsed.
+# 
+# Setting this variable to delayedReboot (7) will cause the
+# Switched Rack PDU to perform a delayedOff command, wait the
+# rPDU2OutletSwitchedConfigRebootDuration OID time, and then perform a
+# delayedOn command.
+# 
+# Setting this variable to cancelPendingCommand (8) will cause any
+# pending command to this outlet to be cancelled."
+#####################################################################
+
+
 my($prod) = "1.3.6.1.4.1.318.1.1.4.1.4";
 # rPDU2OutletSwitchedControlCommand
 my($commandoid) = "1.3.6.1.4.1.318.1.1.26.9.2.4.1.5";
@@ -127,7 +178,7 @@ if ( $command ) {
 if ( $help || $showhelp) {
 	print "\n";
 	print "Usage: $0\n";
-	print "  --outlet=<i>  ( which outlet to operate on, use -1 to operate on all )\n";
+	print "  --outlet=<i>  ( which outlet to operate on, use 0(default) to operate on all )\n";
 	print "  --hostname=<hostname or ip>\n";
 	print "  --verbose  ( print some verbose output )\n";
 	print "  --help ( print this help )\n";
